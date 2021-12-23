@@ -1,4 +1,5 @@
-import { GetServerSideProps } from 'next';
+// import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 
 import Head from 'next/head';
 
@@ -36,8 +37,30 @@ export default function Home({ product }: HomeProps) {
   )
 }
 
-// SSR Props
-export const getServerSideProps: GetServerSideProps = async () => {
+// CSR: fetch data where the content does not need to be indexed
+
+// SSR Props (dynamic data fetching)
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   // Stripe SDK
+//   const price = await stripe.prices.retrieve('price_1K9kzdJBZZDXIB5eN66icTu3');
+
+//   const product = {
+//     priceId: price.id,
+//     amount: new Intl.NumberFormat('en-US', {
+//       style: 'currency',
+//       currency: 'USD',
+//     }).format(price.unit_amount / 100),
+//   }
+
+//   return {
+//     props: {
+//       product,
+//     }
+//   };
+// };
+
+// SSG Props (static data fetching)
+export const getStaticProps: GetStaticProps = async () => {
   // Stripe SDK
   const price = await stripe.prices.retrieve('price_1K9kzdJBZZDXIB5eN66icTu3');
 
@@ -52,6 +75,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       product,
-    }
+    },
+    revalidate: 60 * 60 * 24, // 24 hours
   };
 };
+
