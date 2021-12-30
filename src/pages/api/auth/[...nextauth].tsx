@@ -16,18 +16,33 @@ export default NextAuth({
       },
     }),
   ],
-  jwt: {
-    signingKey: process.env.SIGNING_KEY,
-  },
   callbacks: {
     async signIn({ user, profile }) {
       const { email } = user;
 
       try {
         await fauna.query(
-          q.Create(
-            q.Collection('users'),
-            { data: { email } }
+          // If user not exists, create a new user in DB
+          q.If(
+            q.Not(
+              q.Exists(
+                q.Match(
+                  q.Index('user_by_email'),
+                  q.Casefold(user.email)
+                )
+              )
+            ),
+            q.Create(
+              q.Collection('users'),
+              { data: { email } }
+            ),
+            // else, get exists user data
+            q.Get(
+              q.Match(
+                q.Index('user_by_email'),
+                q.Casefold(user.email)
+              )
+            )
           )
         );
    
