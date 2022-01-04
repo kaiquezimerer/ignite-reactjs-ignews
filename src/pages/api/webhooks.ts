@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Readable } from 'stream';
 import Stripe from 'stripe';
 import { stripe } from '../../services/stipe';
-import saveSubcription from './_lib/manageSubscription';
+import saveSubscription from './_lib/manageSubscription';
 
 async function buffer(readable: Readable) {
   const chunks = [];
@@ -26,6 +26,9 @@ export const config = {
 
 const releventEvents = new Set([
   'checkout.session.completed',
+  'customer.subscription.created',
+  'customer.subscription.updated',
+  'customer.subscription.deleted',
 ]);
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -46,10 +49,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (releventEvents.has(type)) {
       try {
         switch (type) {
+          case 'customer.subscription.updated':
+          case 'customer.subscription.deleted':
+            const subscription = event.data.object as Stripe.Subscription;
+
+            await saveSubscription(
+              subscription.id,
+              subscription.customer.toString(),
+              false,
+            );
+
+            break;
           case 'checkout.session.completed':
             const  checkoutSession = event.data.object as Stripe.Checkout.Session;
           
-            await saveSubcription(checkoutSession.subscription.toString(), checkoutSession.customer.toString());
+            await saveSubscription(
+              checkoutSession.subscription.toString(), 
+              checkoutSession.customer.toString(), 
+              true,
+            );
             
             break;
           default:
