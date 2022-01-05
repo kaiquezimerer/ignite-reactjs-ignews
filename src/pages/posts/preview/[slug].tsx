@@ -1,5 +1,5 @@
-import { GetStaticProps } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { GetStaticPaths, GetStaticProps } from 'next';
+import { useSession } from 'next-auth/react';
 import Head from 'next/head';
 import { RichText } from 'prismic-dom';
 
@@ -55,10 +55,10 @@ export default function PostPreviw({ post }: PostPreviwProps) {
   );
 }
 
-export const getStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: [],
-    fallback: 'blocking',
+    fallback: 'blocking', // true, false, 'blocking'
   };
 }
 
@@ -84,6 +84,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post,
-    }
+    },
+    revalidate: 60 * 30, // 30 minutes
   }
 };
