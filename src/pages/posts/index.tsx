@@ -12,7 +12,7 @@ type Post = {
   title: string;
   excerpt: string;
   updatedAt: string;
-}
+};
 
 interface PostsProps {
   posts: Post[];
@@ -44,6 +44,7 @@ export default function Posts({ posts }: PostsProps) {
   );
 }
 
+// SSG Props
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
@@ -55,6 +56,7 @@ export const getStaticProps: GetStaticProps = async () => {
       pageSize: 100,
     });
 
+  // Formatting data (posts) 
   const posts = response.results.map(post => {
     return {
       slug: post.uid,
@@ -66,7 +68,7 @@ export const getStaticProps: GetStaticProps = async () => {
         year: 'numeric'
       })
     }
-  })
+  });
 
   return {
     props: {

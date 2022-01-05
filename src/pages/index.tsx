@@ -1,10 +1,10 @@
 // import { GetServerSideProps } from 'next';
 import { GetStaticProps } from 'next';
-
 import Head from 'next/head';
 
+import { stripe } from '../services/stripe';
+
 import { SubscribeButton  } from '../components/SubscribeButton';
-import { stripe } from '../services/stipe';
 
 import styles from './home.module.scss';
 
@@ -37,7 +37,7 @@ export default function Home({ product }: HomeProps) {
   )
 }
 
-// CSR: fetch data where the content does not need to be indexed
+// CSR (Client Server Rendering): fetch data where the content does not need to be indexed
 
 // SSR Props (dynamic data fetching)
 // export const getServerSideProps: GetServerSideProps = async () => {
@@ -61,7 +61,6 @@ export default function Home({ product }: HomeProps) {
 
 // SSG Props (static data fetching)
 export const getStaticProps: GetStaticProps = async () => {
-  // Stripe SDK
   const price = await stripe.prices.retrieve('price_1K9kzdJBZZDXIB5eN66icTu3');
 
   const product = {
@@ -76,7 +75,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       product,
     },
-    revalidate: 60 * 60 * 24, // 24 hours
+    revalidate: 60 * 60 * 24, // 24 hours (regenerate statis file)
   };
 };
 

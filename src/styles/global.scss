@@ -18,12 +18,14 @@
   --yellow-500: #eba417;
 }
 
+// Viewport <= 1080px
 @media (max-width: 1080px) {
   html {
     font-size: 93.75%;
   }
 }
 
+// Viewport <= 720px
 @media (max-width: 720px) {
   html {
     font-size: 87.5%;

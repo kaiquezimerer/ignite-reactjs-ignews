@@ -3,7 +3,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Readable } from 'stream';
 import Stripe from 'stripe';
-import { stripe } from '../../services/stipe';
+
+import { stripe } from '../../services/stripe';
 import saveSubscription from './_lib/manageSubscription';
 
 async function buffer(readable: Readable) {
@@ -11,7 +12,7 @@ async function buffer(readable: Readable) {
 
   for await (const chunk of readable) {
     chunks.push(
-      typeof chunk === 'string' ? Buffer.from(chunk) : chunk
+      typeof chunk === 'string'? Buffer.from(chunk) : chunk
     );
   }
 
@@ -81,6 +82,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.json({ received: true });
   } else {
     res.setHeader('Allowed', 'POST');
-    res.status(405).end('Method not allowed');
+    res.status(405).end('Method not allowed.');
   };
 }

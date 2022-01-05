@@ -6,16 +6,16 @@ import { getSession } from 'next-auth/react';
 
 
 import { fauna } from '../../services/fauna';
-import { stripe } from '../../services/stipe';
+import { stripe } from '../../services/stripe';
 
 type User = {
   ref: {
     id: string;
-  }
+  };
   data: {
     stripe_customer_id: string;
-  }
-}
+  };
+};
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'POST') {
