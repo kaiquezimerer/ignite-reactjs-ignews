@@ -22,7 +22,7 @@ jest.mock('next-auth/react', () => {
   }
 });
 
-describe('Header component', () => {
+describe('SignInButton component', () => {
   // Teste de renderizacão do componente Header
   it('renders correctly', () => {
     render(
