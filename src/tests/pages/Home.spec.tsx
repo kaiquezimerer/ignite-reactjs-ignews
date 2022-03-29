@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { mocked } from 'ts-jest/utils';
 
 import { stripe } from '../../services/stripe';
 import Home, { getStaticProps } from '../../pages';
@@ -20,7 +19,7 @@ describe('Home page', () => {
   });
 
   it('loads initial data', async () => {
-    const retrieveStripePricesMocked = mocked(stripe.prices.retrieve);
+    const retrieveStripePricesMocked = jest.mocked(stripe.prices.retrieve);
 
     retrieveStripePricesMocked.mockResolvedValueOnce({
       id: 'fake-price-id',
