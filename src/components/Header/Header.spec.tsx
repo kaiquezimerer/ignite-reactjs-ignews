@@ -29,6 +29,8 @@ describe('SignInButton component', () => {
       <Header />
     );
 
+    screen.logTestingPlaygroundURL();
+
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Posts')).toBeInTheDocument();
   });
