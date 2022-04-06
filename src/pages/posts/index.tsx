@@ -7,6 +7,7 @@ import { RichText } from 'prismic-dom';
 import { getPrismicClient } from '../../services/prismic';
 
 import styles from './styles.module.scss';
+import ApiSearchResponse from '@prismicio/client/types/ApiSearchResponse';
 
 type Post = {
   slug: string;
@@ -17,6 +18,17 @@ type Post = {
 
 interface PostsProps {
   posts: Post[];
+}
+
+interface PostResponseData {
+  title: Array<unknown>;
+  content: Array<unknown>;
+}
+
+interface PostResponse {
+  uid: string;
+  data: PostResponseData;
+  last_publication_date: string;
 }
 
 export default function Posts({ posts }: PostsProps) {
@@ -51,7 +63,7 @@ export default function Posts({ posts }: PostsProps) {
 export const getStaticProps: GetStaticProps = async () => {
   const prismic = getPrismicClient();
 
-  const response = await prismic.query([
+  const response: ApiSearchResponse = await prismic.query([
     Prismic.predicates.at('document.type', 'post')
   ],
     {

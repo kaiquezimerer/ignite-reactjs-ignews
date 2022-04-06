@@ -6,6 +6,8 @@ import { RichText } from 'prismic-dom';
 import styles from './post.module.scss';
 
 import { getPrismicClient } from '../../services/prismic';
+import ApiSearchResponse from '@prismicio/client/types/ApiSearchResponse';
+import { Document } from '@prismicio/client/types/documents';
 
 interface PostProps {
   post: {
@@ -60,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params }) =>
 
   const prismic = getPrismicClient(req);
 
-  const response: Response = await prismic.getByUID('post', String(slug), {});
+  const response: Document = await prismic.getByUID('post', String(slug), {});
 
   const post = {
     slug,
